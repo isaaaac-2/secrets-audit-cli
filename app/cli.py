@@ -54,3 +54,6 @@ def report():
     """Show severity and status breakdown."""
     summary = get_summary_report()
     # Pretty print the summary
+
+if __name__ == "__main__":
+    app()
