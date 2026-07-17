@@ -115,30 +115,40 @@ Add or modify patterns in `app/secret-patterns.json` — no code changes require
 
 ## Architecture
 
-```mermaid
-flowchart TD
-    User[User] -->|runs CLI command| CLI[app/cli.py<br/>Typer Commands]
-    CLI -->|scan| Scanner[app/scanner.py<br/>Detection Engine]
-    CLI -->|list / resolve / report| Models[app/models.py<br/>Database Layer]
-    Scanner -->|loads patterns| Config[app/secret-patterns.json<br/>Regex + Severity]
-    Scanner -->|raw findings| Models
-    Models -->|masked write / read| DB[(SQLite<br/>secret_findings)]
-    subgraph Security_Controls
-        Mask[_mask_secret()<br/>Plaintext never stored]
-        Check[CHECK Constraints<br/>Severity + Status]
-        Trigger[Auto Timestamp<br/>updated_at]
-    end
-    Models --- Mask
-    Models --- Check
-    Models --- Trigger
-    subgraph CI_CD_Pipeline
-        GHA[GitHub Actions<br/>Self-gating]
-        Trivy[Trivy<br/>Container Scan]
-        Semgrep[Semgrep<br/>SAST]
-    end
-    GHA -->|blocks on critical| Models
-    Trivy -->|scans image| Docker[Dockerfile]
-    Semgrep -->|static analysis| Scanner
+```text
+                User runs CLI command
+                        │
+                        ▼
+          ┌──────────────────────────────────┐
+          │          app/cli.py              │ 
+          │         Typer Commands           │  
+          │  scan | list | resolve | report  │
+          │                                  │
+          └──────────────┬───────────────────┘
+                         │
+            ┌────────────┴────────────┐
+            ▼                         ▼
+┌───────────────────────┐   ┌───────────────────────┐
+│   app/scanner.py      │   │   app/models.py       │
+│   Detection Engine    │   │   Database Layer      │
+│                       │   │                       │
+│ • Loads regex patterns│   │ • SQLite schema       │
+│ • Line-by-line scan   │   │ • _mask_secret()      │
+│ • Returns raw findings│   │ • CRUD operations     │
+└───────────┬───────────┘   │ • Summary reports     │
+            │               └───────────┬───────────┘
+            │                           │
+            ▼                           ▼
+┌───────────────────────┐   ┌───────────────────────┐
+│ secret-patterns.json  │   │   SQLite DB           │
+│ Regex + Severity      │   │   secret_findings     │
+└───────────────────────┘   └───────────────────────┘
+
+Security Controls:
+• Plaintext secrets never stored or displayed
+• CHECK constraints on severity and status
+• Auto-updating timestamp trigger
+• .gitignore excludes *.db, .env, venv
 ```
 
 ## Security Design Decisions
