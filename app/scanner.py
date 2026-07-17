@@ -25,11 +25,6 @@ def load_secret_patterns(filename="secret_patterns.json"):
         }
     return compiled_patterns
 
-def mask_secret(text):
-    if len(text) <= 4:
-        return "***"
-    return text[:4] + "***"
-
 def scan_text_block(text_to_scan, compiled_patterns, file_path="unknown"):
     findings = []
 
@@ -45,7 +40,7 @@ def scan_text_block(text_to_scan, compiled_patterns, file_path="unknown"):
                         "line_number": line_number,
                         "secret_type": secret_type,
                         "severity": config["severity"],
-                        "matched_text": mask_secret(match.group(0).strip()),
+                        "matched_text": match.group(0).strip(),
                         "file_path": file_path,
                     }
                 )
