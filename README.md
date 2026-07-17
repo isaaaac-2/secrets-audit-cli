@@ -6,27 +6,6 @@ Built as a DevSecOps portfolio project demonstrating secure development practice
 
 ## Features
 
-• Scans directories recursively for 6+ secret types (AWS keys, generic API keys, private keys, connection strings, hardcoded passwords, env var leaks)
-• Classifies findings by severity (Critical, High, Medium, Low) using configurable regex patterns
-• Tracks remediation lifecycle: open → in-progress → resolved or risk-accepted
-• Stores reviewer notes with justification for accepted risks
-• Generates summary reports showing severity and status breakdowns
-• Masks all detected secrets before storage so plaintext credentials never touch the DB or terminal
-• Self-gating CI/CD integration via GitHub Actions
-• Containerized with Docker and scanned with Trivy as a container security gate
-
-## Tech Stack
-
-• Backend: FastAPI
-• CLI: Typer
-• Database: SQLite with CHECK constraints and auto-updating timestamps
-• Containerization: Docker
-• CI/CD: GitHub Actions
-• Security Scanning: Trivy (container), Semgrep (SAST)
-• Deployment Target: Azure App Service (free tier)
-
-## Features
-
 - Scans directories recursively for multiple secret types (AWS keys, generic API keys, private keys, connection strings, hardcoded passwords, env var leaks).
 - Configurable regex-based detection with severity levels (Critical, High, Medium, Low).
 - Tracks remediation lifecycle: `open` → `in-progress` → `resolved` / `risk-accepted`.
