@@ -1,14 +1,10 @@
 # secrets-audit-cli
 
-CLI tool that scans codebases for hardcoded secrets, API keys, and misconfigured environment variables. Tracks findings with severity levels, remediation status, and risk-accepted notes. Built with FastAPI, Typer, SQLite, Docker, and GitHub Actions as a DevSecOps portfolio project demonstrating security-first development practices.
-
-_Secrets Audit CLI_
-
 A security-first CLI tool that scans codebases for hardcoded secrets, API keys, private keys, and misconfigured environment variables. Findings are tracked in a local SQLite database with severity classification, remediation status, and risk-accepted notes, giving teams a clear audit trail from detection to resolution.
 
 Built as a DevSecOps portfolio project demonstrating secure development practices, CI/CD integration, and infrastructure-as-code hardening.
 
-_Features_
+## Features
 
 • Scans directories recursively for 6+ secret types (AWS keys, generic API keys, private keys, connection strings, hardcoded passwords, env var leaks)
 • Classifies findings by severity (Critical, High, Medium, Low) using configurable regex patterns
@@ -19,7 +15,7 @@ _Features_
 • Self-gating CI/CD integration via GitHub Actions
 • Containerized with Docker and scanned with Trivy as a container security gate
 
-_Tech Stack_
+## Tech Stack
 
 • Backend: FastAPI
 • CLI: Typer
@@ -28,21 +24,6 @@ _Tech Stack_
 • CI/CD: GitHub Actions
 • Security Scanning: Trivy (container), Semgrep (SAST)
 • Deployment Target: Azure App Service (free tier)
-
-_Installation_
-
-1. Clone the repo
-   git clone https://github.com/isaaaac-2/secrets-audit-cli.git
-   cd secrets-audit-cli
-
-2. Create and activate a virtual environment
-   python -m venv secret-cli
-   source secret-cli/bin/activate # Linux/Mac
-   secret-cli\Scripts\activate # Windows
-
-# secrets-audit-cli
-
-A security-first CLI that scans codebases for hardcoded secrets, API keys, private keys, and misconfigured environment variables. Findings are tracked in a local SQLite database with severity classification, remediation status, and reviewer notes, producing an auditable trail from detection to resolution.
 
 ## Features
 
