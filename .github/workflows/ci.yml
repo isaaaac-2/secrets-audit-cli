@@ -1,0 +1,42 @@
+name: CI/CD Security Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run secret scanner on test fixtures
+        run: python -m app.cli scan ./test
+
+      - name: Build Docker image
+        run: docker build -t secrets-audit-cli .
+
+      - name: Run Trivy container scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: secrets-audit-cli
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+
+      - name: Run Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/security-audit
